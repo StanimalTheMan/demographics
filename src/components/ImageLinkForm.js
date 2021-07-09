@@ -3,8 +3,10 @@ import DemographicData from "./DemographicData";
 
 const ImageLinkForm = () => {
   const [imageUrl, setImageUrl] = useState("");
-  const [age, setAge] = useState(0);
-  const [culturalAppearance, setCulturalAppearance] = useState("");
+  const [ageProbability, setAgeProbability] = useState(null);
+  const [culturalAppearanceProbability, setCulturalAppearanceProbability] =
+    useState(null);
+  const [genderProbability, setGenderProbability] = useState(null);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   //   const imageUrlRef = useRef();
 
@@ -23,10 +25,13 @@ const ImageLinkForm = () => {
     console.log(response);
     const data = await response.json();
     console.log(data);
-    setCulturalAppearance(
-      data.results[0].outputs[2].data.regions[0].data.concepts[0].name
+    setCulturalAppearanceProbability(
+      data.results[0].outputs[2].data.regions[0].data.concepts
     );
-    setAge(data.results[0].outputs[4].data.regions[0].data.concepts[0].name);
+    setAgeProbability(data.results[0].outputs[4].data.regions[0].data.concepts);
+    setGenderProbability(
+      data.results[0].outputs[3].data.regions[0].data.concepts
+    );
   };
 
   const handleInputChange = (event) => {
@@ -41,13 +46,17 @@ const ImageLinkForm = () => {
         placeholder="Enter an image url:"
       ></input>
       <button type="submit">Fetch demographic data</button>
-      {isFormSubmitted && (
-        <DemographicData
-          imgUrl={imageUrl}
-          age={age}
-          culturalAppearance={culturalAppearance}
-        />
-      )}
+      {isFormSubmitted &&
+        ageProbability &&
+        culturalAppearanceProbability &&
+        genderProbability && (
+          <DemographicData
+            imgUrl={imageUrl}
+            ageData={ageProbability}
+            culturalAppearanceData={culturalAppearanceProbability}
+            genderData={genderProbability}
+          />
+        )}
     </form>
   );
 };
