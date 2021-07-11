@@ -11,9 +11,21 @@ const DemographicData = ({
       <p>{imgUrl}</p>
       <img src={imgUrl} alt="" />
       <div>
-        {culturalAppearanceData[0].name}
-        {ageData[0].name}
-        {genderData[0].name} - {genderData[0].value}
+        {culturalAppearanceData.map((culturalAppearance, ind) => (
+          <p key={ind}>
+            {culturalAppearance.name} - {culturalAppearance.value}
+          </p>
+        ))}
+        {ageData.map((data, ind) => (
+          <p key={ind}>
+            {data.name} - {data.value}
+          </p>
+        ))}
+        {genderData.map((data, ind) => (
+          <p key={ind}>
+            {data.name} - {data.value}
+          </p>
+        ))}
       </div>
     </>
   );
