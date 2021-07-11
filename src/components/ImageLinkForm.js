@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import DemographicData from "./DemographicData";
 
 const ImageLinkForm = () => {
+  const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [ageProbability, setAgeProbability] = useState(null);
   const [culturalAppearanceProbability, setCulturalAppearanceProbability] =
@@ -13,13 +14,14 @@ const ImageLinkForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     setIsFormSubmitted(true);
+    setImageUrl(input);
     const response = await fetch("http://localhost:5000/data", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        url: imageUrl,
+        url: input,
       }),
     });
     console.log(response);
@@ -35,7 +37,7 @@ const ImageLinkForm = () => {
   };
 
   const handleInputChange = (event) => {
-    setImageUrl(event.target.value);
+    setInput(event.target.value);
   };
 
   return (
