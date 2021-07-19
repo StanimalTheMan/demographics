@@ -22,26 +22,55 @@ const App = () => {
     event.preventDefault();
     setIsFormSubmitted(true);
     setImageUrl(input);
-    const response = await fetch("http://localhost:5000/data", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        url: input,
-      }),
-    });
-    console.log("hi", input);
-    console.log(response);
-    const data = await response.json();
-    console.log(data);
-    setCulturalAppearanceProbability(
-      data.results[0].outputs[2].data.regions[0].data.concepts
-    );
-    setAgeProbability(data.results[0].outputs[4].data.regions[0].data.concepts);
-    setGenderProbability(
-      data.results[0].outputs[3].data.regions[0].data.concepts
-    );
+    try {
+      const response = await fetch("http://localhost:3001/data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: input,
+        }),
+      });
+
+      const data = await response.json();
+
+      setCulturalAppearanceProbability(
+        data.results[0].outputs[2].data.regions[0].data.concepts
+      );
+      setAgeProbability(
+        data.results[0].outputs[4].data.regions[0].data.concepts
+      );
+      setGenderProbability(
+        data.results[0].outputs[3].data.regions[0].data.concepts
+      );
+      displayFaceBox(
+        calculateFaceLocation(
+          data.results[0].outputs[2].data.regions[0].region_info.bounding_box
+        )
+      );
+      // setBox(data.results[2].outputs[2].data.regions[0].region_info.bounding_box);
+    } catch (error) {
+      console.log("Error occured while trying to fetch data");
+    }
+  };
+
+  const calculateFaceLocation = (clarifaiFace) => {
+    const image = document.getElementById("inputimage");
+    const width = Number(image.width);
+    const height = Number(image.height);
+
+    console.log(clarifaiFace.left_col * width);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: clarifaiFace.right_col * width,
+      bottomRow: clarifaiFace.bottom_row * height,
+    };
+  };
+
+  const displayFaceBox = (box) => {
+    setBox(box);
   };
 
   return (
@@ -59,6 +88,7 @@ const App = () => {
             ageData={ageProbability}
             culturalAppearanceData={culturalAppearanceProbability}
             genderData={genderProbability}
+            box={box}
           />
         )}
       <SignIn />
