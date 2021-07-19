@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import ImageLinkForm from "./components/ImageLinkForm";
 import DemographicData from "./components/DemographicData";
 import SignIn from "./components/SignIn";
+import "./App.css";
 
 const App = () => {
   const [input, setInput] = useState("");
@@ -59,16 +60,17 @@ const App = () => {
     const width = Number(image.width);
     const height = Number(image.height);
 
-    console.log(clarifaiFace.left_col * width);
+    console.log(clarifaiFace, height);
     return {
       leftCol: clarifaiFace.left_col * width,
       topRow: clarifaiFace.top_row * height,
-      rightCol: clarifaiFace.right_col * width,
-      bottomRow: clarifaiFace.bottom_row * height,
+      rightCol: width - clarifaiFace.right_col * width,
+      bottomRow: height - clarifaiFace.bottom_row * height,
     };
   };
 
   const displayFaceBox = (box) => {
+    console.log(box);
     setBox(box);
   };
 
@@ -90,7 +92,7 @@ const App = () => {
             box={box}
           />
         )}
-      <SignIn />
+      {/* <SignIn /> */}
     </>
   );
 };
