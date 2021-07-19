@@ -14,7 +14,6 @@ const App = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const handleInputChange = (event) => {
-    console.log("here");
     setInput(event.target.value);
   };
 
